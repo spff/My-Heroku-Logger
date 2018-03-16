@@ -4,5 +4,5 @@ const PORT = process.env.PORT || 5000
 
 express()
   .get('/', (req, res) => res.status(404).send())
-  .post('/', (req, res) => res.send(req))
+  .post('/', (req, res) => res.send("123"))
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
