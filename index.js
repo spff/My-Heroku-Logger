@@ -2,14 +2,7 @@ const express = require('express')
 const path = require('path')
 const PORT = process.env.PORT || 5000
 const bodyParser = require('body-parser')
-
-
-var helper = require('sendgrid').mail;
-
-
-var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
-
-
+const moment = require('moment-timezone')
 
 express()
     .use(bodyParser.json()) // for parsing application/json
@@ -17,25 +10,18 @@ express()
     .get('/', (req, res) => res.status(404).send())
     .post('', bodyParser.json(), (req, res) => {
 
-        console.log(JSON.stringify(req.body))
+        console.log(moment().tz('Asia/Taipei').format() + ' : ' + JSON.stringify(req.body))
 
-        var from_email = new helper.Email('frenchfriessuper@gmail.com');
-        var to_email = new helper.Email('frenchfriessuper@gmail.com');
-        var subject = 'Logger';
-        var content = new helper.Content('text/plain', JSON.stringify(req.body))
-        var mail = new helper.Mail(from_email, subject, to_email, content);
+        const sgMail = require('@sendgrid/mail');
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-        var request = sg.emptyRequest({
-            method: 'POST',
-            path: '/v3/mail/send',
-            body: mail.toJSON(),
-        });
-
-        sg.API(request, function(error, response) {
-            console.log(response.statusCode);
-            console.log(response.body);
-            console.log(response.headers);
-        });
+        const msg = {
+            to: 'frenchfriessuper@gmail.com',
+            from: 'frenchfriessuper@gmail.com',
+            subject: 'Logger',
+            text: moment().tz('Asia/Taipei').format() + ' : ' + JSON.stringify(req.body),
+        };
+        sgMail.send(msg);
 
 
         return res.send('okay')
