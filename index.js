@@ -7,7 +7,7 @@ const moment = require('moment-timezone')
 express()
     .use(bodyParser.json()) // for parsing application/json
     .use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
-    .get('/', (req, res) => res.status(404).send())
+    .get('/', (req, res) => res.send())
     .post('', bodyParser.json(), (req, res) => {
 
         console.log(moment().tz('Asia/Taipei').format() + ' : ' + JSON.stringify(req.body))
