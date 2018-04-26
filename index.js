@@ -12,10 +12,11 @@ express()
     .get('/', (req, res) => res.render('pages/index'))
     .post('', bodyParser.json(), (req, res) => {
 
+        console.log(moment().tz('Asia/Taipei').format() + ' : ' + req.body)
         console.log(moment().tz('Asia/Taipei').format() + ' : ' + JSON.stringify(req.body))
 
-        const sgMail = require('@sendgrid/mail');
-        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        //const sgMail = require('@sendgrid/mail');
+        //sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
         const msg = {
             to: 'frenchfriessuper@gmail.com',
@@ -23,7 +24,7 @@ express()
             subject: 'Logger',
             text: moment().tz('Asia/Taipei').format() + ' : ' + JSON.stringify(req.body),
         };
-        sgMail.send(msg);
+        //sgMail.send(msg);
 
 
         return res.send('okay')
